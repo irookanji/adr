@@ -22,15 +22,20 @@ eslint: array-callback-return.
 
 
 // bad
+```bash
 [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
     const flatten = acc.concat(item);
 });
+```
 // good
+```bash
 [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
     const flatten = acc.concat(item);
     return flatten;
 });
+```
 // bad
+```bash
 inbox.filter((msg) => {
     const { subject, author } = msg;
     if (subject === 'Mockingbird') {
@@ -39,7 +44,9 @@ inbox.filter((msg) => {
         return false;
     }
 });
+```
 // good
+```bash
 inbox.filter((msg) => {
     const { subject, author } = msg;
     if (subject === 'Mockingbird') {
@@ -47,7 +54,7 @@ inbox.filter((msg) => {
     }
     return false;
 });
-
+```
 
 ---
 
@@ -59,13 +66,16 @@ Use map() / every() / filter() / find() / findIndex() / reduce() / some() / ... 
 
 
 // bad
+```bash
 const increasedByOne = [];
 for (let i = 0; i < numbers.length; i++) {
     increasedByOne.push(numbers[i] + 1);
 }
+```
 // best
+```bash
 const increasedByOne = numbers.map((num) => num + 1);
-
+```
 
 ---
 
@@ -77,21 +87,26 @@ Why? Destructuring saves you from creating temporary references for those proper
 
 
 // bad
+```bash
 function getFullName(user) {
     const firstName = user.firstName;
     const lastName = user.lastName;
     return `${firstName} ${lastName}`;
 }
+```
 // good
+```bash
 function getFullName(user) {
     const { firstName, lastName } = user;
     return `${firstName} ${lastName}`;
 }
+```
 // best
+```bash
 function getFullName({ firstName, lastName }) {
     return `${firstName} ${lastName}`;
 }
-
+```
 
 ---
 
@@ -102,17 +117,20 @@ Why? Syntactic sugar. It reads well when multiple functions are chained together
 
 // bad
 // No implicit return with side effects
+```bash
 let result = []
 [1,2,3].map((number) => {
     const nextNumber = number + 1;
     result.push(number)
 })
+```
 // good
+```bash
 [1, 2, 3].map((number) => {
     const nextNumber = number + 1;
     return `A string containing the ${nextNumber}.`;
 });
-
+```
 
 ---
 
@@ -122,20 +140,23 @@ Why? Template strings give you a readable, concise syntax with proper newlines a
 
 
 // bad
+```bash
 function sayHi(name) {
     return 'How are you, ' + name + '?';
 }
 // good
+```bash
 function sayHi(name) {
     return `How are you, ${name}?`;
 }
-
+```
 
 ---
 
 Use default parameter syntax rather than mutating function arguments.
 
 // bad
+```bash
 function handleThings(opts) {
     // No! We shouldn’t mutate function arguments.
     // Double bad: if opts is falsy it'll be set to an object which may
@@ -143,11 +164,13 @@ function handleThings(opts) {
     opts = opts || {};
     // ...
 }
+```
 // good
+```bash
 function handleThings(opts = {}) {
     // ...
 }
-
+```
 
 ---
 
@@ -157,15 +180,19 @@ Why? Manipulating objects passed in as parameters can cause unwanted variable si
 
 
 // bad
+```bash
 function f1(obj) {
     obj.key = 1;
      // ...
 }
+```
 // good
+```bash
 function f2(obj) {
     const key = obj.hasOwnProperty('key') ? obj.key : 1;
      // ...
 }
+```
 
 
 ---
@@ -174,17 +201,24 @@ Avoid confusing arrow function syntax (=>) with comparison operators (<=, >=). e
 
 
 // bad
+```bash
 const itemHeight = (item) => item.height <= 256 ? item.largeSize : item.smallSize;
+```
 // bad
+```bash
 const itemHeight = (item) => item.height >= 256 ? item.largeSize : item.smallSize;
+```
 // good
+```bash
 const itemHeight = (item) => (item.height <= 256 ? item.largeSize : item.smallSize);
+```
 // good
+```bash
 const itemHeight = (item) => {
     const { height, largeSize, smallSize } = item;
     return height <= 256 ? largeSize : smallSize;
 };
-
+```
 
 ---
 
@@ -194,6 +228,7 @@ Why? let and const are block scoped and not function scoped.
 
 
 // bad - unnecessary function call
+```bash
 function checkName(hasName) {
     const name = getName();
     if (hasName === 'test') {
@@ -204,7 +239,9 @@ function checkName(hasName) {
     }
     return name;
 }
+```
 // good
+```bash
 function checkName(hasName) {
     if (hasName === 'test') {
         return false;
@@ -215,7 +252,7 @@ function checkName(hasName) {
     }
     return name;
 }
-
+```
 
 ---
 
@@ -223,6 +260,7 @@ If an if block always executes a return statement, the subsequent else block is 
 
 
 // bad
+```bash
 function foo() {
     if (x) {
         return x;
@@ -230,14 +268,16 @@ function foo() {
         return y;
     }
 }
+```
 // good
+```bash
 function foo() {
     if (x) {
         return x;
     }
     return y;
 }
-
+```
 
 ---
 
@@ -245,12 +285,15 @@ Don't use selection operators in place of control statements.
 
 
 // bad
+```bash
 !isRunning && startRunning();
+```
 // good
+```bash
 if (!isRunning) {
     startRunning();
 }
-
+```
 
 ---
 
@@ -258,26 +301,31 @@ Don’t save references to this. Use arrow functions or Function#bind.
 
 
 // bad
+```bash
 function foo() {
     const self = this;
     return function () {
         console.log(self);
     };
 }
+```
 // bad
+```bash
 function foo() {
     const that = this;
     return function () {
         console.log(that);
     };
 }
+```
 // good
+```bash
 function foo() {
     return () => {
         console.log(this);
     };
 }
-
+```
 
 ---
 
@@ -285,14 +333,17 @@ If the property/method is a boolean, use isVal() or hasVal()
 
 
 // bad
+```bash
 if (!dragon.age()) {
     return false;
 }
+```
 // good
+```bash
 if (!dragon.hasAge()) {
     return false;
 }
-
+```
 
 ---
 
@@ -302,6 +353,7 @@ Do not export container classes or objects with static methods or properties for
 
 
 // bad: Container is an exported class that has only static methods and fields.
+```bash
 export class Container {
 /\*_ @return {number} _/
     static bar() {
@@ -310,14 +362,16 @@ export class Container {
 }
 /\*_ @const {number} _/
 Container.FOO = 1;
+```
 Instead, export individual constants and functions:
 // good
+```bash
 /\*_ @return {number} _/
 export function bar() {
     return 1;
 }
 export const /\*_ number _/ FOO = 1;
-
+```
 
 ---
 
@@ -327,13 +381,16 @@ Never use new on the primitive object wrappers (Boolean, Number, String, Symbol)
 
 
 // bad
+```bash
 const /\*_ Boolean _/ x = new Boolean(false);
 if (x) alert(typeof x)// alerts 'object' - WAT?
 // The wrappers may be called as functions for coercing (which is preferred over using + or concatenating the empty string) or creating symbols.
+```
 // good
+```bash
 const /\*_ boolean _/ x = Boolean(0);
 if (!x) alert(typeof x);// alerts 'boolean', as expected
-
+```
 
 ---
 
@@ -345,6 +402,7 @@ Continue right after the if statement. Write:
 
 
 // bad
+```bash
 if (test) {
     // Perform something if test is true
     // …
@@ -353,30 +411,35 @@ if (test) {
     // Perform something if test is false
     // …
 }
+```
 // good
+```bash
 if (test) {
     // Perform something if test is true
     // …
     return;
 }
 // …
-
+```
 
 ---
 
-When you want to store to a variable a literal value depending on a condition, use a conditional (ternary) operator instead of an if...else statement. This rule also applies when returning a value. Write:
+### When you want to store to a variable a literal value depending on a condition, use a conditional (ternary) operator instead of an if...else statement. This rule also applies when returning a value. Write:
 
 
 //bad
+```bash
 let x;
 if (condition) {
     x = 1;
 } else {
     x = 2;
 }
+```
 //good
+```bash
 const x = condition ? 1 : 2;
-
+```
 
 ---
 
@@ -392,11 +455,14 @@ Use variable names as shown here:
 
 
 // bad
+```bash
 const s = d / t;
+```
 // good
+```bash
 const speed = distance / time;
 const playerScore = 0;
-
+```
 
 Switch statements can be a little tricky.
 
@@ -404,6 +470,7 @@ Don't add a break statement after a return statement in a specific case. Instead
 
 
 // bad
+```bash
 switch (species) {
     case "chicken":
         return farm.shed;
@@ -413,8 +480,10 @@ switch (species) {
         break;
     default:
         return "";
-}
+} 
+```
 // good
+```bash
 switch (species) {
     case "chicken":
         return farm.shed;
@@ -423,7 +492,7 @@ switch (species) {
     default:
         return "";
 }
-
+```
 
 ---
 
@@ -432,15 +501,17 @@ switch (species) {
 Avoid single letter names. Be descriptive with your naming. eslint: id-length
 
 
-// bad
+// bad```bash`
 function q() {
     // ...
 }
+```
 // good
+```bash
 function query() {
     // ...
 }
-
+```
 
 ---
 
@@ -448,13 +519,16 @@ Use camelCase when naming objects, functions, and instances. eslint: camelcase
 
 
 // bad
+```bash
 const OBJEcttsssss = {};
 const this_is_my_object = {};
 function c() {}
+```
 // good
+```bash
 const thisIsMyObject = {};
 function thisIsMyFunction() {}
-
+```
 
 ---
 
@@ -464,16 +538,19 @@ Why? JavaScript does not have the concept of privacy in terms of properties or m
 
 
 // bad
+```bash
 this.__firstName__ = 'Panda';
 this.firstName_ = 'Panda';
 this._firstName = 'Panda';
+```
 // good
+```bash
 this.firstName = 'Panda';
 // good, in environments where WeakMaps are available
 // see https://kangax.github.io/compat-table/es6/#test-WeakMap
 const firstNames = new WeakMap();
 firstNames.set(this, 'Panda');
-
+```
 
 ### Importing
 
@@ -483,10 +560,13 @@ Why? Including extensions inhibits refactoring, and inappropriately hardcodes im
 
 
 // bad
+```bash
 import foo from './foo.js';
 import bar from './bar.jsx';
 import baz from './baz/index.jsx';
+```
 // good
+```bash
 import foo from './foo';
 import bar from './bar';
 import baz from './baz';
