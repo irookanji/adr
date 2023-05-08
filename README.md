@@ -21,21 +21,21 @@ Use return statements in array method callbacks. It’s ok to omit the return if
 eslint: array-callback-return.
 
 
-// bad
 ```bash
+// bad
 [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
     const flatten = acc.concat(item);
 });
-```
+
 // good
-```bash
+
 [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
     const flatten = acc.concat(item);
     return flatten;
 });
-```
+
 // bad
-```bash
+
 inbox.filter((msg) => {
     const { subject, author } = msg;
     if (subject === 'Mockingbird') {
@@ -44,9 +44,9 @@ inbox.filter((msg) => {
         return false;
     }
 });
-```
+
 // good
-```bash
+
 inbox.filter((msg) => {
     const { subject, author } = msg;
     if (subject === 'Mockingbird') {
@@ -64,16 +64,15 @@ Why? This enforces our immutable rule. Dealing with pure functions that return v
 
 Use map() / every() / filter() / find() / findIndex() / reduce() / some() / ... to iterate over arrays, and Object.keys() / Object.values() / Object.entries() to produce arrays so you can iterate over objects.
 
-
-// bad
 ```bash
+// bad
 const increasedByOne = [];
 for (let i = 0; i < numbers.length; i++) {
     increasedByOne.push(numbers[i] + 1);
 }
-```
+
 // best
-```bash
+
 const increasedByOne = numbers.map((num) => num + 1);
 ```
 
@@ -85,24 +84,23 @@ Use object destructuring when accessing and using multiple properties of an obje
 
 Why? Destructuring saves you from creating temporary references for those properties, and from repetitive access of the object. Repeating object access creates more repetitive code, requires more reading, and creates more opportunities for mistakes. Destructuring objects also provides a single site of definition of the object structure that is used in the block, rather than requiring reading the entire block to determine what is used.
 
-
-// bad
 ```bash
+// bad
 function getFullName(user) {
     const firstName = user.firstName;
     const lastName = user.lastName;
     return `${firstName} ${lastName}`;
 }
-```
+
 // good
-```bash
+
 function getFullName(user) {
     const { firstName, lastName } = user;
     return `${firstName} ${lastName}`;
 }
-```
+
 // best
-```bash
+
 function getFullName({ firstName, lastName }) {
     return `${firstName} ${lastName}`;
 }
@@ -114,18 +112,16 @@ If the function body consists of a single statement returning an expression with
 
 Why? Syntactic sugar. It reads well when multiple functions are chained together.
 
-
+```bash
 // bad
 // No implicit return with side effects
-```bash
 let result = []
 [1,2,3].map((number) => {
     const nextNumber = number + 1;
     result.push(number)
 })
-```
+
 // good
-```bash
 [1, 2, 3].map((number) => {
     const nextNumber = number + 1;
     return `A string containing the ${nextNumber}.`;
@@ -138,14 +134,12 @@ When programmatically building up strings, use template strings instead of conca
 
 Why? Template strings give you a readable, concise syntax with proper newlines and string interpolation features.
 
-
-// bad
 ```bash
+// bad
 function sayHi(name) {
     return 'How are you, ' + name + '?';
 }
 // good
-```bash
 function sayHi(name) {
     return `How are you, ${name}?`;
 }
@@ -155,8 +149,8 @@ function sayHi(name) {
 
 Use default parameter syntax rather than mutating function arguments.
 
-// bad
 ```bash
+// bad
 function handleThings(opts) {
     // No! We shouldn’t mutate function arguments.
     // Double bad: if opts is falsy it'll be set to an object which may
@@ -164,9 +158,9 @@ function handleThings(opts) {
     opts = opts || {};
     // ...
 }
-```
+
 // good
-```bash
+
 function handleThings(opts = {}) {
     // ...
 }
@@ -178,16 +172,13 @@ Never mutate parameters. eslint: no-param-reassign
 
 Why? Manipulating objects passed in as parameters can cause unwanted variable side effects in the original caller.
 
-
-// bad
 ```bash
+// bad
 function f1(obj) {
     obj.key = 1;
      // ...
 }
-```
 // good
-```bash
 function f2(obj) {
     const key = obj.hasOwnProperty('key') ? obj.key : 1;
      // ...
